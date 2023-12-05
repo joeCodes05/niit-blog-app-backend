@@ -1,5 +1,6 @@
 const mysql = require("mysql");
 const dotenv = require("dotenv");
+const Connection = require("mysql/lib/Connection");
 
 dotenv.config();
 
@@ -12,7 +13,7 @@ const db = mysql.createConnection({
 
 db.connect((error) => {
   if (error)
-    console.log(`Could not connect to database, due to: ${error.message}`);
+    console.log(`Could not connect to MYSQL: ${error.stack}`);
   else {
     // create user tables
     db.query(`CREATE TABLE IF NOT EXISTS users (
@@ -27,7 +28,7 @@ db.connect((error) => {
       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     ) CHARSET utf8mb4 COLLATE = utf8mb_unicode_ci, ENGINE = InnoDB`);
 
-    console.log("Connection successful");
+    console.log(`Connected to MYSQL as id: ${db.threadId}`);
   }
 });
 
