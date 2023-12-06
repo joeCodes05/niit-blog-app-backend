@@ -1,8 +1,5 @@
 const mysql = require("mysql");
-const dotenv = require("dotenv");
-const Connection = require("mysql/lib/Connection");
-
-dotenv.config();
+require('dotenv').config();
 
 const db = mysql.createConnection({
   host: process.env.HOST,
@@ -23,12 +20,11 @@ db.connect((error) => {
       password VARCHAR(100) NOT NULL,
       profile_image VARCHAR(100) NULL,
       status TINYINT(5) DEFAULT 1,
-      token VARCHAR(50) NULL,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-    ) CHARSET utf8mb4 COLLATE = utf8mb_unicode_ci, ENGINE = InnoDB`);
+    ) CHARSET utf8mb4 COLLATE = utf8mb4_unicode_ci, ENGINE = InnoDB`);
 
-    console.log(`Connected to MYSQL as id: ${db.threadId}`);
+    console.log(`Connected to MYSQL at id: ${db.threadId}`);
   }
 });
 
