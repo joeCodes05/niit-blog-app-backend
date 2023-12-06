@@ -80,13 +80,13 @@ const login = (req, res) => {
     }
 
     const { password: removePassword, ...userData } = data[0];
-    const token = jwt.sign(userData, process.env.SECRET_KEY);
+    const token = jwt.sign(userData, process.env.MY_SECRET, { expiresIn: "10m" });
 
-    res.cookie('access_token', token, {
+    res.cookie("x-access_token", token, {
       httpOnly: true
     }).status(200).json({
       error: false,
-      message: `Welcome back ${full_name}.`
+      message: `Welcome back ${full_name}`,
     });
   })
 }
