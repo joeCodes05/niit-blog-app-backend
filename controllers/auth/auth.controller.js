@@ -20,7 +20,7 @@ const createUsers = async (req, res) => {
       if (data[0].email === email) {
         return res.status(400).json({
           error: true,
-          message: "Email address already exists"
+          message: "Email address already exists",
         })
       }
     }
@@ -48,7 +48,7 @@ const createUsers = async (req, res) => {
 } 
 
 // login controller
-const login = (req, res) => {
+const loginUser = (req, res) => {
   const {email, password} = req.body;
 
   // check if user exists
@@ -60,6 +60,7 @@ const login = (req, res) => {
       });
     }
 
+    // check if user credential is in database
     if (!data.length) {
       return res.status(404).json({
         error: true,
@@ -67,11 +68,11 @@ const login = (req, res) => {
       })
     }
 
-    const {full_name, password: userPassword} = data[0];
-
     // check client password with hashedPassword in database
+    const {full_name, password: userPassword} = data[0];
     const checkPassword = bcrypt.compareSync(password, userPassword);
 
+    // account validation
     if (!checkPassword) {
       return res.status(400).json({
         error: true,
@@ -79,16 +80,30 @@ const login = (req, res) => {
       })
     }
 
+    // generate jsonwebtoken
     const { password: removePassword, ...userData } = data[0];
-    const token = jwt.sign(userData, process.env.MY_SECRET, { expiresIn: "10m" });
+    const token = jwt.sign({ email: userData.email }, process.env.MY_SECRET);
 
-    res.cookie("x-access_token", token, {
-      httpOnly: true
+    // set cookie with token
+    res.cookie("user-token", token, {
+      httpOnly: true,
     }).status(200).json({
       error: false,
-      message: `Welcome back ${full_name}`,
+      message: `Welcome back! You're logged in successfully.`,
+      data: userData
     });
   })
 }
 
-module.exports = {createUsers, login};
+// logout controller
+const logoutUser = (req, res) => {
+  res.clearCookie('user-token', {
+    sameSite: "none",
+    secure: true
+  }).status(200).json({
+    error: false,
+    message: 'User logged out'
+  });
+}
+
+module.exports = {createUsers, loginUser, logoutUser};
