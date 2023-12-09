@@ -76,7 +76,7 @@ const loginUser = (req, res) => {
     if (!checkPassword) {
       return res.status(400).json({
         error: true,
-        message: "Invalid email address or password. Please try again"
+        message: "Invalid email address or password."
       })
     }
 
