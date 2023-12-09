@@ -89,7 +89,6 @@ const loginUser = (req, res) => {
       httpOnly: true,
     }).status(200).json({
       error: false,
-      message: `Welcome back! You're logged in successfully.`,
       data: userData
     });
   })
