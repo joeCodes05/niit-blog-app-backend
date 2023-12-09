@@ -4,6 +4,7 @@ const cookieParser = require('cookie-parser');
 
 // routes
 const authRoutes = require('./routes/auth/auth.routes');
+const postRoutes = require('./routes/posts/posts.routes');
 
 const app = express();
 
@@ -13,6 +14,7 @@ app.use(cookieParser());
 app.use(express.json());
 
 app.use('/api/auth', authRoutes);
+app.use('/api/posts', postRoutes);
 
 const PORT = process.env.PORT || 5000;
 
